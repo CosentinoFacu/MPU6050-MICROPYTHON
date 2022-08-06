@@ -1,0 +1,101 @@
+'''
+Programa: Calibracion de MPU6050
+
+Proposito: Obtener los valores medios de offset para la aceleracion en cada eje
+
+Programdor: Cosentino Facundo, Sergio Zelaya
+fecha: 30/07/2022
+'''
+
+'''
+----------------------------
+Librerias a usar
+----------------------------
+'''
+
+from imu import MPU6050        #Importamos MPU_6050 de imu
+import time                    #Importamos time para los delay
+from machine import Pin, I2C   #Importamos Pin e I2C de machine
+
+'''
+----------------------------
+Configuracion de modulos
+----------------------------
+'''
+
+I2c = I2C(0,sda=Pin(21),scl=Pin(22),freq=400000)    #Configuramos comunicacion I2C 
+imu = MPU6050(I2c)                                  #Configuramos MPU6050
+
+'''
+----------------------------
+Definicion de Funciones
+----------------------------
+'''
+### Funcion para error en X
+def errorX(n):
+    error = 0                     #Inicualizamos error en cero
+    suma = 0                      #Inicualizamos sumatoria en cero
+    
+    print("Calculando...")        #letrero de que entro en la rutina
+     
+    for i in range (n):           #iteramos n ciclos para obtener la sumatoria
+        vinst = imu.accel.x       #leemos el valor actual del sensor en el eje X
+        error = 1 - vinst         #calculamos el erroe
+        suma = suma + error       #acumulamos el error en suma 
+        time.sleep(0.01)          #timepo de 10ms entre cada muestra
+        
+    promedio = suma / n           #calculamos el valor promedio
+    return promedio, suma         #retornamos el premedio y la sumatoria
+
+### Funcion para error en Y
+def errorY(n):
+    error = 0                     #Inicualizamos error en cero
+    suma = 0                      #Inicualizamos sumatoria en cero
+    
+    print("Calculando...")        #letrero de que entro en la rutina
+    
+    for i in range (n):           #iteramos n ciclos para obtener la sumatoria
+        vinst = imu.accel.y       #leemos el valor actual del sensor en el eje Y
+        error = 1 - vinst         #calculamos el erroe
+        suma = suma + error       #acumulamos el error en suma 
+        time.sleep(0.01)          #timepo de 10ms entre cada muestra
+        
+    promedio = suma / n           #calculamos el valor promedio
+    return promedio, suma         #retornamos el premedio y la sumatoria    
+    
+### Funcion para error en Z
+    
+def errorZ(n):
+    error = 0                     #Inicualizamos error en cero
+    suma = 0                      #Inicualizamos sumatoria en cero
+    
+    print("Calculando...")        #letrero de que entro en la rutina
+    
+    for i in range (n):           #iteramos n ciclos para obtener la sumatoria
+        vinst = imu.accel.z       #leemos el valor actual del sensor en el eje Z
+        error = 1 - vinst         #calculamos el erroe
+        suma = suma + error       #acumulamos el error en suma 
+        time.sleep(0.01)          #timepo de 10ms entre cada muestra
+        
+    promedio = suma / n           #calculamos el valor promedio
+    return promedio, suma         #retornamos el premedio y la sumatoria
+
+### Funcion para Imprimir los datos
+
+def printdata(eje,error,sumatoria,muestras):
+    
+    if type(eje) is str:                                                                                                          #si no ingresamos el valor de eje como un string salta un error
+        print("El valor medio del error en el eje",eje,"es de",error,"siendo la sumatoria",sumatoria,"en",muestras,"muestras")    #Mensaje de exito
+    else:
+        print("Error: el valor de eje debe ser 'str'")     #Mensaje de error           
+
+'''
+----------------------------
+Funcion principal
+----------------------------
+'''
+start=time.ticks_us()                   #Medimos el tiempo en el calcular el error
+errorz,sumatoria=errorZ(100)            #Calculamos el error en un determinado eje
+end=time.ticks_us()
+printdata('Z',errorz,sumatoria,100)     #Mostramos los datos obtenidos
+print("Proceso de",end-start,"uS")
