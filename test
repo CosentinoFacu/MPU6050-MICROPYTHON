@@ -1,10 +1,22 @@
-from imu import MPU6050
-import time
-from machine import Pin, I2C
+'''
+Programa: Test MPU6050
 
-I2c = I2C(0,sda=Pin(21),scl=Pin(22),freq=400000)
-imu = MPU6050(I2c)
+Proposito: Verificar funcionamento de sensor MPU6050
+
+Programadores: Facundo Cosentino, Sergio Zelaya
+Fecha: 29/07/2022
+'''
+
+from imu import MPU6050        #Importamos MPU_6050 de imu
+import time                    #Importamos time para los delay
+from machine import Pin, I2C   #Importamos Pin e I2C de machine 
+
+I2c = I2C(0,sda=Pin(21),scl=Pin(22),freq=400000)    #Configuramos comunicacion I2C 
+imu = MPU6050(I2c)                                  #Configuramos MPU6050
 
 while True:
-    print(imu.accel.x," ",imu.accel.y," ",imu.accel.z)
-    time.sleep(1)
+    Gx = imu.accel.x   #Leemos Aceleracion en X
+    Gy = imu.accel.y   #Leemos Aceleracion en Y
+    Gz = imu.accel.z   #Leemos Aceleracion en Z
+    print("Aceleracion en X: ",Gx," Aceleracion en Y",Gz," Aceleracion en Z",Gz) #Impresion de los valores
+    time.sleep(1)      #Esperamos un 1 segundo
