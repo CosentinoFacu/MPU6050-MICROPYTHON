@@ -4,7 +4,7 @@ Programa: Test MPU6050
 Proposito: Verificar funcionamento de sensor MPU6050
 
 Programadores: Facundo Cosentino, Sergio Zelaya
-Fecha: 29/07/2022
+Fecha: 30/07/2022
 '''
 
 from imu import MPU6050        #Importamos MPU_6050 de imu
@@ -19,4 +19,5 @@ while True:
     Gy = imu.accel.y   #Leemos Aceleracion en Y
     Gz = imu.accel.z   #Leemos Aceleracion en Z
     print("Aceleracion en X: ",Gx," Aceleracion en Y",Gz," Aceleracion en Z",Gz) #Impresion de los valores
+    print(" ")
     time.sleep(1)      #Esperamos un 1 segundo
